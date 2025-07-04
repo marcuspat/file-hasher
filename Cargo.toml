@@ -1,0 +1,23 @@
+[package]
+name = "file-hasher"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <you@example.com>"]
+description = "A fast and efficient CLI tool for calculating SHA256, SHA1, and MD5 hashes of files with progress indication and colored output"
+license = "MIT"
+repository = "https://github.com/marcuspat/file-hasher"
+keywords = ["hash", "checksum", "sha256", "md5"]
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+sha2 = "0.10"
+md5 = "0.7"
+sha1 = "0.10"
+hex = "0.4"
+indicatif = "0.17"
+colored = "2"
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.0"
+tempfile = "3.0"
