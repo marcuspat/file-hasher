@@ -2,9 +2,12 @@
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {},
 
-  // Runs once after the container is created to set up your environment.
-  "postCreateCommand": "git clone https://github.com/marcuspat/turbo-flow-claude.git && mv turbo-flow-claude/devpods . && rm -rf turbo-flow-claude && chmod +x ./devpods/*.sh && ./devpods/codespace_setup.sh",
+  // This command downloads your trusted boot script to a temporary location,
+  // makes it executable, and then runs it. This is more reliable than
+  // cloning the entire repository during the build.
+  "postCreateCommand": "curl -L https://raw.githubusercontent.com/marcuspat/turbo-flow-claude/main/devpods/boot_codespace.sh -o /tmp/boot.sh && chmod +x /tmp/boot.sh && /tmp/boot.sh",
 
-  // Runs your specific tmux script after you connect to the container.
-  "postAttachCommand": "./devpods/tmux-workspace.sh"
+  // After the setup is complete and you connect, this command will run
+  // to attach you to the tmux session created by your scripts.
+  "postAttachCommand": "if [ -f ./devpods/tmux-workspace.sh ]; then ./devpods/tmux-workspace.sh; else echo 'tmux workspace script not found. Setup may have failed.'; fi"
 }
