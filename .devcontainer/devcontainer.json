@@ -2,9 +2,13 @@
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {},
 
-  // Runs once after the container is created to set up your environment.
-  "postCreateCommand": "git clone https://github.com/marcuspat/turbo-flow-claude.git && mv turbo-flow-claude/devpods . && rm -rf turbo-flow-claude && chmod +x ./devpods/*.sh && ./devpods/codespace_setup.sh",
+  // This command is wrapped in 'bash -c' with 'set -e' to ensure that if any
+  // step fails, the entire script will exit immediately with an error,
+  // making it much easier to debug.
+  "postCreateCommand": "bash -c 'set -e && git clone https://github.com/marcuspat/turbo-flow-claude.git && mv turbo-flow-claude/devpods . && rm -rf turbo-flow-claude && chmod +x ./devpods/*.sh && ./devpods/codespace_setup.sh'",
 
-  // Runs your specific tmux script after you connect to the container.
-  "postAttachCommand": "./devpods/tmux-workspace.sh"
+  // This command now safely checks if the tmux script exists and is executable
+  // before trying to run it. This prevents errors if the postCreateCommand
+  // did not complete successfully.
+  "postAttachCommand": "if [ -f ./devpods/tmux-workspace.sh ] && [ -x ./devpods/tmux-workspace.sh ]; then ./devpods/tmux-workspace.sh; else echo \"Workspace script not found or not executable.\"; fi"
 }
