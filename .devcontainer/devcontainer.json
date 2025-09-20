@@ -2,5 +2,9 @@
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {},
 
-  "postCreateCommand": "curl -L https://raw.githubusercontent.com/marcuspat/turbo-flow-claude/main/devpods/boot_codespace.sh -o /tmp/boot.sh && chmod +x /tmp/boot.sh && /tmp/boot.sh"
+  // Runs once after the container is created to set up your environment.
+  "postCreateCommand": "git clone https://github.com/marcuspat/turbo-flow-claude.git && mv turbo-flow-claude/devpods . && rm -rf turbo-flow-claude && chmod +x ./devpods/*.sh && ./devpods/codespace_setup.sh",
+
+  // Runs your specific tmux script after you connect to the container.
+  "postAttachCommand": "./devpods/tmux-workspace.sh"
 }
