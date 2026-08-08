@@ -5,6 +5,12 @@
 
 A fast and efficient CLI tool for calculating SHA256, SHA1, and MD5 hashes of files with progress indication and colored output. Optimized for performance with streaming support for large files.
 
+## Demo
+
+![file-hasher hashing and verifying files](demo.gif)
+
+*Recorded from the actual binary with [asciinema](https://asciinema.org) + [agg](https://github.com/asciinema/agg).*
+
 ## Features
 
 - **Multiple hash algorithms**: SHA256, MD5, SHA1, or all at once
