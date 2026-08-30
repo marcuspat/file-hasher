@@ -127,13 +127,6 @@ cargo clippy -- -D warnings
 cargo fmt -- --check
 ```
 
-### CI/CD
-
-The project includes GitHub Actions workflows that run on every push and pull request:
-- Run all tests
-- Check code with clippy
-- Verify code formatting
-
 ## Performance
 
 File Hasher is optimized for speed and memory efficiency:
@@ -141,7 +134,7 @@ File Hasher is optimized for speed and memory efficiency:
 - **Streaming**: Processes files in chunks, using minimal memory regardless of file size
 - **Progress indication**: Automatic progress bars for files larger than 10MB
 - **Multi-algorithm efficiency**: When using `--algorithm all`, file is read only once
-- **Benchmarks**: Can hash a 1GB file in under 3 seconds on modern hardware (SHA256)
+- **Benchmarks**: Can hash a 1GB file in under 3 seconds on modern hardware (SHA256) — see [TEST_RESULTS.md](TEST_RESULTS.md)
 
 ## Contributing
 
