@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/banner.svg" alt="file-hasher — animated banner" width="100%"></p>
+
 # File Hasher
 
 [![Crates.io](https://img.shields.io/crates/v/file-hasher.svg)](https://crates.io/crates/file-hasher)
