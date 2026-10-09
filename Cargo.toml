@@ -1,11 +1,13 @@
 [package]
 name = "file-hasher"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Your Name <you@example.com>"]
 description = "A fast and efficient CLI tool for calculating SHA256, SHA1, and MD5 hashes of files with progress indication and colored output"
 license = "MIT"
 repository = "https://github.com/marcuspat/file-hasher"
+homepage = "https://www.adventurewavelabs.space/projects/file-hasher"
+documentation = "https://docs.rs/file-hasher"
 keywords = ["hash", "checksum", "sha256", "md5"]
 
 [dependencies]
