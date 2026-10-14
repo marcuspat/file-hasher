@@ -1,6 +1,6 @@
 [package]
 name = "file-hasher"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Your Name <you@example.com>"]
 description = "A fast and efficient CLI tool for calculating SHA256, SHA1, and MD5 hashes of files with progress indication and colored output"

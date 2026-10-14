@@ -1,6 +1,6 @@
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
-use file_hasher::{hash_file, HashAlgorithm};
+use file_hasher::{hash_file_all_with_progress, hash_file_with_progress, HashAlgorithm};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::fs;
 use std::path::Path;
@@ -58,18 +58,24 @@ fn main() {
         }
         verify_file(&args.files[0], &expected_hash, args.algorithm);
     } else {
+        let mut failed = false;
         for file in &args.files {
-            hash_and_display(file, args.algorithm);
+            if !hash_and_display(file, args.algorithm) {
+                failed = true;
+            }
+        }
+        if failed {
+            std::process::exit(1);
         }
     }
 }
 
-fn hash_and_display(file_path: &str, algorithm: Algorithm) {
+fn hash_and_display(file_path: &str, algorithm: Algorithm) -> bool {
     let path = Path::new(file_path);
 
     if !path.exists() {
         eprintln!("{}: File '{}' not found", "Error".red(), file_path);
-        std::process::exit(1);
+        return false;
     }
 
     let file_size = match fs::metadata(path) {
@@ -81,7 +87,7 @@ fn hash_and_display(file_path: &str, algorithm: Algorithm) {
                 file_path,
                 e
             );
-            return;
+            return false;
         }
     };
 
@@ -103,42 +109,50 @@ fn hash_and_display(file_path: &str, algorithm: Algorithm) {
     } else {
         None
     };
+    let bump = |n: u64| {
+        if let Some(pb) = pb.as_ref() {
+            pb.inc(n);
+        }
+    };
 
     println!("\n{} {}", "File:".bold(), file_path.cyan());
 
-    if algorithm == Algorithm::All {
-        let algorithms = vec![
-            (Algorithm::Sha256, HashAlgorithm::SHA256),
-            (Algorithm::Md5, HashAlgorithm::MD5),
-            (Algorithm::Sha1, HashAlgorithm::SHA1),
-        ];
-
-        for (algo, hash_algo) in algorithms {
-            match hash_file(path, hash_algo) {
-                Ok(hash) => {
-                    let algo_name = format!("{:?}", algo).to_uppercase();
-                    println!("  {}: {}", algo_name.green().bold(), hash);
-                }
-                Err(e) => {
-                    eprintln!("  {}: Failed to compute {:?} - {}", "Error".red(), algo, e);
-                }
+    let result = if algorithm == Algorithm::All {
+        match hash_file_all_with_progress(path, bump) {
+            Ok(hashes) => {
+                println!("  {}: {}", "SHA256".green().bold(), hashes.sha256);
+                println!("  {}: {}", "MD5".green().bold(), hashes.md5);
+                println!("  {}: {}", "SHA1".green().bold(), hashes.sha1);
+                true
+            }
+            Err(e) => {
+                eprintln!(
+                    "  {}: Failed to compute all hashes - {}",
+                    "Error".red(),
+                    e
+                );
+                false
             }
         }
     } else {
-        match hash_file(path, algorithm.into()) {
+        match hash_file_with_progress(path, algorithm.into(), bump) {
             Ok(hash) => {
                 let algo_name = format!("{:?}", algorithm).to_uppercase();
                 println!("  {}: {}", algo_name.green().bold(), hash);
+                true
             }
             Err(e) => {
                 eprintln!("  {}: Failed to compute hash - {}", "Error".red(), e);
+                false
             }
         }
-    }
+    };
 
     if let Some(pb) = pb {
         pb.finish_and_clear();
     }
+
+    result
 }
 
 fn verify_file(file_path: &str, expected_hash: &str, algorithm: Algorithm) {
@@ -167,7 +181,7 @@ fn verify_file(file_path: &str, expected_hash: &str, algorithm: Algorithm) {
         algorithm.into()
     };
 
-    match hash_file(path, hash_algo) {
+    match hash_file_with_progress(path, hash_algo, |_| {}) {
         Ok(computed_hash) => {
             if computed_hash.eq_ignore_ascii_case(expected_hash) {
                 println!(
