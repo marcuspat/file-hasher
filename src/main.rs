@@ -126,11 +126,7 @@ fn hash_and_display(file_path: &str, algorithm: Algorithm) -> bool {
                 true
             }
             Err(e) => {
-                eprintln!(
-                    "  {}: Failed to compute all hashes - {}",
-                    "Error".red(),
-                    e
-                );
+                eprintln!("  {}: Failed to compute all hashes - {}", "Error".red(), e);
                 false
             }
         }

@@ -4,7 +4,8 @@ use std::io;
 use std::path::Path;
 
 pub use hash::{
-    compute_all_with_progress, compute_md5, compute_sha1, compute_sha256, AllHashes,
+    compute_all_with_progress, compute_md5, compute_md5_with_progress, compute_sha1,
+    compute_sha1_with_progress, compute_sha256, compute_sha256_with_progress, AllHashes,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq)]
