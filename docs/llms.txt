@@ -1,0 +1,15 @@
+# file-hasher
+
+> Fast CLI tool for calculating SHA256, SHA1, and MD5 file hashes with progress bars, verification, and streaming support for large files.
+
+file-hasher is maintained by marcuspat (Agentic Engineer — Platform Engineering × AI-assisted development).
+
+## Links
+
+- [Landing page](https://marcuspat.github.io/file-hasher/): overview, features, FAQ
+- [Source code](https://github.com/marcuspat/file-hasher): README, issues, releases
+## Install
+
+```
+cargo install file-hasher
+```
